@@ -63,10 +63,38 @@ public class ListSorter<T> {
 	 * @return
 	 */
 	public List<T> mergeSort(List<T> list, Comparator<T> comparator) {
-        // FILL THIS IN!
-        return null;
+        if(list.size() == 0 || list.size() == 1){
+        	return list;
+        }
+       List<T> temp = new LinkedList<T>(list.subList(0, list.size()/2));
+       List<T> temp1 = new LinkedList<T>(list.subList(list.size()/2, list.size()));
+       List<T> left = mergeSort(temp, comparator);
+       List<T> right = mergeSort(temp1, comparator);
+       return merge(left, right, comparator);
 	}
 
+	private List<T> merge(List<T> left, List<T> right, Comparator<T> comparator){
+		List<T> finalList = new LinkedList<T>();
+		while(left.size() > 0 && right.size() > 0){
+			T lfirst = left.get(0);
+			T rfirst = right.get(0);
+			if(comparator.compare(lfirst, rfirst) < 0){
+				finalList.add(lfirst);
+				left.remove(0);
+			}
+			else{
+				finalList.add(rfirst);
+				right.remove(0);
+			}
+		}
+		if(right.size() > 0){
+			finalList.addAll(right);
+		}
+		else{
+			finalList.addAll(left);
+		}
+		return finalList;
+	}
 	/**
 	 * Sorts a list using a Comparator object.
 	 * 
@@ -75,7 +103,16 @@ public class ListSorter<T> {
 	 * @return
 	 */
 	public void heapSort(List<T> list, Comparator<T> comparator) {
-        // FILL THIS IN!
+        PriorityQueue<T> pq = new PriorityQueue<T>();
+        pq.addAll(list);
+        //for(int i = 0; i < list.size(); i ++){
+        //	pq.offer(list.get(i));
+        //}
+        int i = 0;
+        while(pq.size() > 0){
+        	list.set(i, pq.poll());
+        	i++;
+        }
 	}
 
 	
@@ -89,8 +126,8 @@ public class ListSorter<T> {
 	 * @return
 	 */
 	public List<T> topK(int k, List<T> list, Comparator<T> comparator) {
-        // FILL THIS IN!
-        return null;
+		heapSort(list,  comparator);
+     	return list.subList(list.size() - k, list.size());
 	}
 
 	
